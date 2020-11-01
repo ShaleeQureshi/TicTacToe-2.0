@@ -1,3 +1,4 @@
+
 /*
 * Last Modified: November 1, 2020
 * Author: Shalee (Shahrukh) Qureshi
@@ -7,13 +8,13 @@
 * 1. View(Model model)
 *
 * Method List:
-* 1. private void layoutView() = This method creates the initial layout for the Calculator
-* 2. private void initializeControllers() = This method initializes the controllers
-* 3. public void update() = This method updates the UI
+* 1. public void updateView() = This method updates the state of the program
+* 2. public JButton[][] getButtons() = This method allows the other classes (Model class) access to the game board matrix (buttons[][])
+* 3. private void initializePanel() = This method sets the layout for the entire main screen
+* 4. private void initializeControllers() = This method initializes the controllers
 *
 */
 // Import Statements
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -25,153 +26,83 @@ import java.awt.Dimension;
 
 public class View extends JPanel {
 
+    // Instance Variables
     private Model model;
     private JButton[][] buttons = new JButton[3][3];
     private JLabel lblTurn = new JLabel("Current Turn: X");
-    private int xCount = 0;
-    private int oCount = 0;
 
+    /**
+     * This is the View Constructor
+     * 
+     * @param model
+     */
     public View(Model model) {
-        super();
-        this.model = model;
+        super(); // Invoking the Superclass
+        this.model = model; // Initializing Instance Variable
         this.model.setGUI(this);
         this.setPreferredSize(new Dimension(200, 150));
+
+        // Invoking helper Methods
         this.initializePanel();
         this.initializeControllers();
-    }
 
+    } // View Constructor
+
+    /**
+     * This method updates the state of the program
+     */
     public void updateView() {
-        int val = this.model.getButtonNum();
-        int[] indices = new int[2];
+        int val = this.model.getButtonNum(); // Getting the value (button number that was clicked)
 
+        int[] indices = new int[2]; // Getting the indices (for the 2d matrix that the num was clicked)
+
+        // If the value clicked was not 5 the following will occur
         if (val != 5) {
-            indices = this.model.getIndex(val);
+            indices = this.model.getIndex(val); // Getting the indices
+
+            // If the current player was Player X the following will occur
             if (this.lblTurn.getText() == "Current Turn: X") {
-                this.buttons[indices[0]][indices[1]].setText("X");
-                this.lblTurn.setText("Current Turn: O");
-            } else {
-                this.buttons[indices[0]][indices[1]].setText("O");
-                this.lblTurn.setText("Current Turn: X");
+                this.buttons[indices[0]][indices[1]].setText("X"); // Changing the button text to X
+                this.lblTurn.setText("Current Turn: O"); // Letting the Players know its Player O's turn
             }
+            // If the current player was Player O the following will occur
+            else {
+                this.buttons[indices[0]][indices[1]].setText("O"); // Changing the button text to O
+                this.lblTurn.setText("Current Turn: X"); // Letting the Players know its Player X's turn
+            }
+            // Checking to see if someone won yet
             if (this.model.determineWinner()) {
+                // If Player X won the following will occur
                 if (this.model.getXCount() >= 3) {
                     JOptionPane.showMessageDialog(null, "Winner Player X");
-                } else {
+                }
+                // If Player O won the following will occur
+                else {
                     JOptionPane.showMessageDialog(null, "Winner Player O");
                 }
             }
         }
 
-    }
+    } // updateView Method
 
+    /**
+     * This method allows the other classes (Model class) access to the game board
+     * matrix (buttons[][])
+     * 
+     * @return 2D button array
+     */
     public JButton[][] getButtons() {
         return this.buttons;
-    }
+    } // getButtons Method
 
-    private int[] getIndex(int val) {
-        int[] array = new int[2];
-        for (int i = 0; i < this.buttons.length; i++) {
-            for (int j = 0; j < this.buttons[i].length; j++) {
-                if (i == 0 && j < 3) {
-                    if (((i + 1) + j) == val) {
-                        array[0] = i;
-                        array[1] = j;
-                        return array;
-                    }
-                } else if (i == 1 && j < 3) {
-                    if (((i + 2) + j + 1) == val) {
-                        array[0] = i;
-                        array[1] = j;
-                        return array;
-                    }
-                } else if (i == 2 && j < 3) {
-                    if (((i + 3) + j + 2) == val) {
-                        array[0] = i;
-                        array[1] = j;
-                        return array;
-                    }
-                }
-            }
-        }
-        return array;
-    }
+    // Helper Methods
 
-    private boolean winner() {
-
-        for (int i = 0; i < this.buttons.length; i++) {
-            for (int j = 0; j < this.buttons[i].length; j++) {
-                // Check row for j-1
-                if (this.buttons[i][j].getText() == "X" || this.buttons[i][j].getText() == "O") {
-                    if (j < this.buttons[i].length - 1) {
-                        if (this.buttons[i][j].getText() == this.buttons[i][j + 1].getText()) {
-                            if (this.buttons[i][j].getText() == "X") {
-                                this.xCount++;
-                            } else {
-                                this.oCount++;
-                            }
-                        }
-                    }
-                    // Check vertically for i-1
-                    if (i < this.buttons.length - 1) {
-                        if (this.buttons[i][j].getText() == this.buttons[i + 1][j].getText()) {
-                            if (this.buttons[i][j].getText() == "X") {
-                                this.xCount++;
-                            } else {
-                                this.oCount++;
-                            }
-                        }
-                    }
-                    // Check diagonally (only for indicies 0 and 2)
-                    if (i == 0) {
-                        if (j == 0) {
-                            if (this.buttons[i][j].getText() == this.buttons[i + 1][j + 1].getText()) {
-                                if (this.buttons[i][j].getText() == "X") {
-                                    this.xCount++;
-                                } else {
-                                    this.oCount++;
-                                }
-                            }
-                        } else {
-                            if (this.buttons[i][j].getText() == this.buttons[i + 1][j - 1].getText()) {
-                                if (this.buttons[i][j].getText() == "X") {
-                                    this.xCount++;
-                                } else {
-                                    this.oCount++;
-                                }
-                            }
-                        }
-                    }
-                    if (i == 2) {
-                        if (j == 0) {
-                            if (this.buttons[i][j].getText() == this.buttons[i - 1][j + 1].getText()) {
-                                if (this.buttons[i][j].getText() == "X") {
-                                    this.xCount++;
-                                } else {
-                                    this.oCount++;
-                                }
-                            }
-                        } else {
-                            if (this.buttons[i][j].getText() == this.buttons[i - 1][j - 1].getText()) {
-                                if (this.buttons[i][j].getText() == "X") {
-                                    this.xCount++;
-                                } else {
-                                    this.oCount++;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if (this.xCount >= 3 || this.oCount >= 3) {
-            return true;
-        }
-        return false;
-
-    }
-
+    /**
+     * This method sets the layout for the entire main screen
+     */
     private void initializePanel() {
 
+        // Instantiating Objects
         JPanel panelTurn = new JPanel();
         JPanel panelRow1 = new JPanel();
         JPanel panelRow2 = new JPanel();
@@ -180,12 +111,18 @@ public class View extends JPanel {
         BoxLayout layoutRow2 = new BoxLayout(panelRow2, BoxLayout.X_AXIS);
         BoxLayout layoutRow3 = new BoxLayout(panelRow3, BoxLayout.X_AXIS);
 
+        // Loop to traverse through the rows
         for (int i = 0; i < this.buttons.length; i++) {
+            // Loop to traverse through the individual columns
             for (int j = 0; j < this.buttons[i].length; j++) {
+                // If its row 1 values the following will occur
                 if (i == 0 && j < 3) {
                     this.buttons[i][j] = new JButton("" + ((i + 1) + j));
                     panelRow1.add(this.buttons[i][j]);
-                } else if (i == 1 && j < 3) {
+                }
+                // If its row 2 values the following will occur
+                else if (i == 1 && j < 3) {
+                    // If its button number 5 the following will occur
                     if (i == 1 && j == 1) {
                         this.buttons[i][j] = new JButton("N");
                         this.buttons[i][j].setBackground(Color.BLACK);
@@ -193,32 +130,48 @@ public class View extends JPanel {
                         this.buttons[i][j] = new JButton("" + ((i + 2) + j + 1));
                     }
                     panelRow2.add(this.buttons[i][j]);
-                } else if (i == 2 && j < 3) {
+                }
+                // If its row 3 values the following will occur
+                else if (i == 2 && j < 3) {
                     this.buttons[i][j] = new JButton("" + ((i + 3) + j + 2));
                     panelRow3.add(this.buttons[i][j]);
                 }
-            }
-        }
+            } // for loop
+
+        } // for loop
+
+        // Adding the layouts to the individual panels
         panelTurn.add(this.lblTurn);
         panelRow1.setLayout(layoutRow1);
         panelRow2.setLayout(layoutRow2);
         panelRow3.setLayout(layoutRow3);
+
+        // Adding each panel to the main panel
         this.add(panelTurn);
         this.add(panelRow1);
         this.add(panelRow2);
         this.add(panelRow3);
 
-    }
+    } // initializePanel Method
 
+    /**
+     * This method initializes the controllers
+     */
     private void initializeControllers() {
+
+        // Creating a 2D controller array to match the 2D JButton array in size
         Controller[][] controllers = new Controller[this.buttons.length][this.buttons.length];
+
+        // Loop to traverse the rows of the matrix
         for (int i = 0; i < this.buttons.length; i++) {
+            // Loop to traverse the individual columns of the matrix
             for (int j = 0; j < this.buttons[i].length; j++) {
-                controllers[i][j] = new Controller(this.model, this.buttons[i][j]);
-                this.buttons[i][j].addActionListener(controllers[i][j]);
-            }
-        }
-    }
+                controllers[i][j] = new Controller(this.model); // Initializing the Controller
+                this.buttons[i][j].addActionListener(controllers[i][j]); // Adding an ActionListener to the JButton
+            } // for loop
+        } // for loop
+
+    } // initializeControllers Method
 
     public static void main(String[] args) {
         Model model = new Model();
@@ -232,4 +185,4 @@ public class View extends JPanel {
         frame.setVisible(true);
     }
 
-}
+} // View Class

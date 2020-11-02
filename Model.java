@@ -11,16 +11,17 @@
 * 1. public void getPlayers() = This method gets 2 players
 * 2. public void outputToFile() = This method outputs the data to a file (output.txt)
 * 3. public void setGUI(View view) = This method sets the GUI and initializes the button matrix
-* 4. public void setButtonNum(int num) = This method sets the number to the JButton
-* 5. public int getButtonNum() = This method gets the number to the JButton
-* 6. public int getXCount() = This method gets the xCount
-* 7. public void updateXWins() = This method updates Player X's wins
-* 8. public void updateOWins() = This method updates Player O's wins
-* 9. public int currentRound() = This method returns the current round
-* 10. public int[] getIndex(int val) = This method gets the indices within a matrix when given a specific value
-* 11. public boolean determineWinner() = This method determines who won the game
-* 12. public void newRound() = This method will reset the score between the players when a new round starts
-* 13. public void updateState() = This method invokes the updateView Method in the View Class
+* 4. public void btnEvents(String command) = This method performs an action based on the action command
+* 5. public void setButtonNum(int num) = This method sets the number to the JButton
+* 6. public int getButtonNum() = This method gets the number to the JButton
+* 7. public int getXCount() = This method gets the xCount
+* 8. public void updateXWins() = This method updates Player X's wins
+* 9. public void updateOWins() = This method updates Player O's wins
+* 10. public int currentRound() = This method returns the current round
+* 11. public int[] getIndex(int val) = This method gets the indices within a matrix when given a specific value
+* 12. public boolean determineWinner() = This method determines who won the game
+* 13. public void newRound() = This method will reset the score between the players when a new round starts
+* 14. public void updateState() = This method invokes the updateView Method in the View Class
 *
 */
 // Import Statements
@@ -39,6 +40,7 @@ public class Model extends Object {
     private JButton[][] buttons;
     private int xCount = 0;
     private int oCount = 0;
+    private int currentRound = 0;
 
     /**
      * Model Constructor
@@ -91,6 +93,49 @@ public class Model extends Object {
     } // setGUI Method
 
     /**
+     * This method performs an event based on the action command
+     * 
+     * @param command
+     */
+    public void btnEvents(String command) {
+
+        // If the user presses the Settings button the following will occur
+        if (command == "Exit Game") {
+            this.outputToFile(); // Calling the output to file method
+        }
+        // If the restart button was clicked the following will occur
+        else if (command == "Restart") {
+            Object[] options = { "Restart Game", "Restart Round" };
+            int selectedOption = JOptionPane.showOptionDialog(null,
+                    "Do you want to restart the game or the current round?",
+                    "TicTacToe 2.0 by Shahrukh (Shalee) Qureshi", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+                    null, options, null);
+
+            // If the user wants to Restart the Game the following will occur
+            if (selectedOption == JOptionPane.OK_OPTION) {
+                // Resetting the Score
+                this.playerXWins = 0;
+                this.playerOWins = 0;
+                this.view.setLabelCurrentRound("Round: " + (this.currentRound = 0));
+                // Resetting the gameboard
+                this.newRound();
+            }
+            // If the user wants to reset the round the following will occur
+            else {
+                this.newRound();
+            }
+
+        }
+        // If the user presses the Settings button the following will occur
+        else if (command == "Settings") {
+            // Opening up the Settings Model and calling its view method
+            SettingsModel model = new SettingsModel();
+            new SettingsView(model);
+        }
+
+    } // btnEvents Method
+
+    /**
      * This method sets the number to the JButton
      * 
      * @param num
@@ -141,7 +186,8 @@ public class Model extends Object {
      */
     public int currentRound() {
         // The current round is equal to the total number of wins between the players
-        return this.playerOWins + this.playerXWins;
+        this.currentRound = this.playerOWins + this.playerXWins;
+        return this.currentRound;
     } // currentRound Method
 
     /**
@@ -311,6 +357,29 @@ public class Model extends Object {
     public void newRound() {
         this.xCount = 0;
         this.oCount = 0;
+        /**
+         * This method resets the game board to its default values
+         */
+        // Loop to traverse through the rows
+        for (int i = 0; i < this.buttons.length; i++) {
+            // Loop to traverse through the individual columns
+            for (int j = 0; j < this.buttons[i].length; j++) {
+                // If its row 1 values the following will occur
+                if (i == 0 && j < 3) {
+                    this.buttons[i][j].setText("" + ((i + 1) + j));
+                }
+                // If its row 2 values the following will occur
+                else if (i == 1 && j < 3) {
+                    this.buttons[i][j].setText("" + ((i + 2) + j + 1));
+                }
+                // If its row 3 values the following will occur
+                else if (i == 2 && j < 3) {
+                    this.buttons[i][j].setText("" + ((i + 3) + j + 2));
+                }
+            } // for loop
+
+        } // for loop
+
     } // newRound Method
 
     /**

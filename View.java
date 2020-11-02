@@ -10,8 +10,10 @@
 * Method List:
 * 1. public void updateView() = This method updates the state of the program
 * 2. public JButton[][] getButtons() = This method allows the other classes (Model class) access to the game board matrix (buttons[][])
-* 3. private void initializePanel() = This method sets the layout for the entire main screen
-* 4. private void initializeControllers() = This method initializes the controllers
+* 3. public void setLabelCurrentRound(String text) = This method sets the current round label
+* 4. private void initializePanel() = This method sets the layout for the entire main screen
+* 5. private void initializeControllers() = This method initializes the controllers
+* 6. private void setGameBoard() = This method resets the gameboard to its default values
 *
 */
 // Import Statements
@@ -25,10 +27,17 @@ import java.awt.Dimension;
 
 public class View extends JPanel {
 
+    /**
+     * ID for Serializable Classes
+     */
+    private static final long serialVersionUID = 1L;
+
     // Instance Variables
     private Model model;
     private JButton[][] buttons = new JButton[3][3];
     private JButton btnExit = new JButton("Exit Game");
+    private JButton btnSettings = new JButton("Settings");
+    private JButton btnRestart = new JButton("Restart");
     private JLabel lblTurn = new JLabel("Current Turn: X");
     private JLabel lblCurrentRound = new JLabel("Round: 0");
     private JPanel panelRow1 = new JPanel();
@@ -45,7 +54,7 @@ public class View extends JPanel {
         this.model = model; // Initializing Instance Variable
         this.model.getPlayers(); // Getting the Players
         this.model.setGUI(this); // Setting this GUI
-        this.setPreferredSize(new Dimension(200, 150));
+        this.setPreferredSize(new Dimension(200, 200));
         this.setFocusable(true);
         this.requestFocusInWindow();
         // Invoking helper Methods
@@ -90,10 +99,9 @@ public class View extends JPanel {
                 }
                 // If the players have not played 4 rounds the following will occur
                 if (this.model.currentRound() < 4) {
-                    this.setGameBoard(); // Resetting the game board
-                    this.model.newRound(); // Resetting the score
-                    this.lblCurrentRound.setText("Round: " + this.model.currentRound()); // Updating the current round
-                                                                                         // label
+                    this.model.newRound(); // Creating a new round
+                    // Updating the Current Round Label
+                    this.setLabelCurrentRound("Round: " + this.model.currentRound());
                 }
                 // If the players have played 4 rounds the following will occur
                 else {
@@ -114,6 +122,15 @@ public class View extends JPanel {
     public JButton[][] getButtons() {
         return this.buttons;
     } // getButtons Method
+
+    /**
+     * This method sets the current round label
+     * 
+     * @param text
+     */
+    public void setLabelCurrentRound(String text) {
+        this.lblCurrentRound.setText(text);
+    } // setLabelCurrentRound Method
 
     // Helper Methods
 
@@ -170,31 +187,11 @@ public class View extends JPanel {
         this.add(this.panelRow1);
         this.add(this.panelRow2);
         this.add(this.panelRow3);
+        this.add(this.btnSettings);
+        this.add(this.btnRestart);
         this.add(this.btnExit);
 
     } // initializePanel Method
-
-    public void setGameBoard() {
-        // Loop to traverse through the rows
-        for (int i = 0; i < this.buttons.length; i++) {
-            // Loop to traverse through the individual columns
-            for (int j = 0; j < this.buttons[i].length; j++) {
-                // If its row 1 values the following will occur
-                if (i == 0 && j < 3) {
-                    this.buttons[i][j].setText("" + ((i + 1) + j));
-                }
-                // If its row 2 values the following will occur
-                else if (i == 1 && j < 3) {
-                    this.buttons[i][j].setText("" + ((i + 2) + j + 1));
-                }
-                // If its row 3 values the following will occur
-                else if (i == 2 && j < 3) {
-                    this.buttons[i][j].setText("" + ((i + 3) + j + 2));
-                }
-            } // for loop
-
-        } // for loop
-    }
 
     /**
      * This method initializes the controllers
@@ -214,8 +211,10 @@ public class View extends JPanel {
         } // for loop
 
         // Adding a Controller to the exit button
-        Controller exitController = new Controller(this.model);
-        this.btnExit.addActionListener(exitController);
+        Controller btnController = new Controller(this.model);
+        this.btnExit.addActionListener(btnController);
+        this.btnRestart.addActionListener(btnController);
+        this.btnSettings.addActionListener(btnController);
 
         // // Adding a Controller for the KeyListener
         Controller keyController = new Controller(this.model);

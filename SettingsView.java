@@ -31,11 +31,17 @@ import java.awt.Color;
 
 public class SettingsView extends JFrame {
 
+    /**
+     * ID for Serializable Classes
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     // Instance Variables
     private JSplitPane splitPane;
     private JScrollPane scrollPane;
     private JPanel mainPanel;
-    private String[] listItems = { "About", "Help" };
+    private String[] listItems = { "About", "Help", "Game Settings" };
     private JPanel[] panels;
     private JLabel[] labels;
     private JButton btnGitHub = new JButton("GitHub");
@@ -156,7 +162,7 @@ public class SettingsView extends JFrame {
         this.labels[1].setText("<html><u>Need some help? Watch a quick video!");
         this.labels[1].setFont(this.lblFont);
         this.btnHelp = this.btnSetter(this.btnHelp);
-        this.panels[1].add(this.labels[1]);
+        this.panels[1].add(this.labels[1], BorderLayout.NORTH);
         this.panels[1].add(this.btnHelp, BorderLayout.CENTER);
 
         // Adjusting the SplitPane

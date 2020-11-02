@@ -10,7 +10,7 @@
 * Method List:
 * 1. public void setGUI(SettingsView view) = This method sets the GUI for the SettingsView
 * 2. public void updateState() = This method updates the state of the program
-* 3. public void browse(JButton btn) = This method determines which URI to pursue based on the button that is clicked
+* 3. public void performAction(String command) = This method performs an action when a button is clicked
 * 4. private void openWeb(String uri) = This method opens a specific URI on the web
 *
 */
@@ -52,12 +52,11 @@ public class SettingsModel extends Object {
     } // updateState Method
 
     /**
-     * This method determines which URI to pursue based on the button that is
-     * clicked
+     * This method performs an action when a button is clicked
      * 
-     * @param btn
+     * @param command
      */
-    public void browse(String command) {
+    public void performAction(String command) {
         // If the GitHub button was clicked the following will occur
         if (command == "GitHub") {
             this.openWeb(this.github);
@@ -66,8 +65,7 @@ public class SettingsModel extends Object {
         else if (command == "Website") {
             this.openWeb(this.personalSite);
         }
-
-    } // browse Method
+    } // performAction Method
 
     // Helper Methods
 

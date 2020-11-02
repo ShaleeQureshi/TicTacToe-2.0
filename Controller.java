@@ -39,15 +39,19 @@ public class Controller implements ActionListener, KeyListener {
      * @param e
      */
     public void actionPerformed(ActionEvent e) {
-        // If the user wants to exit the game the following will occur
-        if (e.getActionCommand() == "Exit Game") {
-            this.model.outputToFile();
+        // If the user presses a button the following will occur
+        if (e.getActionCommand() == "Exit Game" || e.getActionCommand() == "Settings"
+                || e.getActionCommand() == "Restart") {
+            this.model.btnEvents(e.getActionCommand());
         }
-        try {
-            this.model.setButtonNum(Integer.parseInt(e.getActionCommand())); // Setting the number to the button
-        } catch (NumberFormatException error) {
-            System.out.println(error.getMessage());
-            JOptionPane.showMessageDialog(null, error.getMessage());
+        // If 1 of the buttons stated above was not pressed then the following will
+        // occur
+        else {
+            try {
+                this.model.setButtonNum(Integer.parseInt(e.getActionCommand())); // Setting the number to the button
+            } catch (NumberFormatException error) {
+                JOptionPane.showMessageDialog(null, error.getMessage());
+            }
         }
     } // actionPerformed Method
 

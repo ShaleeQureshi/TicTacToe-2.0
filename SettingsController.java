@@ -50,7 +50,7 @@ public class SettingsController implements ListSelectionListener, ActionListener
      * @param e
      */
     public void actionPerformed(ActionEvent e) {
-        this.model.browse(e.getActionCommand()); // Passing the command to the browse function
+        this.model.performAction(e.getActionCommand()); // Performing an action based on the button clicked
     } // actionPerformed Method
 
 } // SettingsController Method

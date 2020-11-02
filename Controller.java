@@ -41,7 +41,7 @@ public class Controller implements ActionListener, KeyListener {
     public void actionPerformed(ActionEvent e) {
         // If the user presses a button the following will occur
         if (e.getActionCommand() == "Exit Game" || e.getActionCommand() == "Settings"
-                || e.getActionCommand() == "Restart") {
+                || e.getActionCommand() == "Restart" || e.getActionCommand() == "Move the AI") {
             this.model.btnEvents(e.getActionCommand());
         }
         // If 1 of the buttons stated above was not pressed then the following will

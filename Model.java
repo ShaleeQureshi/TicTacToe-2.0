@@ -8,20 +8,22 @@
 * 1. Model()
 *
 * Method List:
-* 1. public void getPlayers() = This method gets 2 players
-* 2. public void outputToFile() = This method outputs the data to a file (output.txt)
-* 3. public void setGUI(View view) = This method sets the GUI and initializes the button matrix
-* 4. public void btnEvents(String command) = This method performs an action based on the action command
-* 5. public void setButtonNum(int num) = This method sets the number to the JButton
-* 6. public int getButtonNum() = This method gets the number to the JButton
-* 7. public int getXCount() = This method gets the xCount
-* 8. public void updateXWins() = This method updates Player X's wins
-* 9. public void updateOWins() = This method updates Player O's wins
-* 10. public int currentRound() = This method returns the current round
-* 11. public int[] getIndex(int val) = This method gets the indices within a matrix when given a specific value
-* 12. public boolean determineWinner() = This method determines who won the game
-* 13. public void newRound() = This method will reset the score between the players when a new round starts
-* 14. public void updateState() = This method invokes the updateView Method in the View Class
+* 1. public void start() = This method starts the process of prompting the player before they play the game
+* 2. public String getPlayerSelection() = This method returns the selected game mode
+* 3. public void outputToFile() = This method outputs the data to a file (output.txt)
+* 4. public void setGUI(View view) = This method sets the GUI and initializes the button matrix
+* 5. public void btnEvents(String command) = This method performs an action based on the action command
+* 6. public void setButtonNum(int num) = This method sets the number to the JButton
+* 7. public int getButtonNum() = This method gets the number to the JButton
+* 8. public int getXCount() = This method gets the xCount
+* 9. public void updateXWins() = This method updates Player X's wins
+* 10. public void updateOWins() = This method updates Player O's wins
+* 11. public int currentRound() = This method returns the current round
+* 12. public int[] getIndex(int val) = This method gets the indices within a matrix when given a specific value
+* 13. public int[] computer() = This method determines where the AI should place its letter
+* 14. public boolean determineWinner() = This method determines who won the game
+* 15. public void newRound() = This method will reset the score between the players when a new round starts
+* 16. public void updateState() = This method invokes the updateView Method in the View Class
 *
 */
 // Import Statements
@@ -37,10 +39,12 @@ public class Model extends Object {
     private View view;
     private String playerX, playerO;
     private int buttonNum, playerXWins, playerOWins;
+    private String playerSelection;
     private JButton[][] buttons;
     private int xCount = 0;
     private int oCount = 0;
     private int currentRound = 0;
+    private Players players = new Players();
 
     /**
      * Model Constructor
@@ -50,13 +54,24 @@ public class Model extends Object {
     } // Model Constructor
 
     /**
-     * This method gets 2 players
+     * This method starts the process of prompting the player before they play the
+     * game
      */
-    public void getPlayers() {
-        this.playerX = JOptionPane.showInputDialog(null, "Please enter the name for Player X");
-        this.playerO = JOptionPane.showInputDialog(null, "Please enter the name for Player O");
-        JOptionPane.showMessageDialog(null, "You can open Settings at any point by pressing the Escape Key");
+    public void start() {
+        this.players.gameMode();
+        this.playerX = this.players.getPlayerX();
+        this.playerO = this.players.getPlayerO();
+        this.playerSelection = this.players.getPlayerSelection();
     } // getPlayers Method
+
+    /**
+     * This method returns the selected game mode
+     * 
+     * @return playerSelection
+     */
+    public String getPlayerSelection() {
+        return this.playerSelection;
+    } // getPlayerSelection Method
 
     /**
      * This method outputs the data to a file (output.txt)
@@ -131,6 +146,12 @@ public class Model extends Object {
             // Opening up the Settings Model and calling its view method
             SettingsModel model = new SettingsModel();
             new SettingsView(model);
+        }
+        // If the user presses the Move the AI button the following will occur
+        else {
+            if (this.view.getLblTurnText() == "Current Turn: AI") {
+                this.updateState();
+            }
         }
 
     } // btnEvents Method
@@ -240,6 +261,35 @@ public class Model extends Object {
         return array; // Return array
 
     } // getIndex Method
+
+    /**
+     * This method determines where the AI should place its letter
+     * 
+     * @return an array of 2 numbers with the row and col the letter should be
+     *         placed
+     */
+    public int[] computer() {
+        int[] array = new int[2]; // Array of size 2
+
+        // Loop to traverse the array (rows)
+        for (int i = 0; i < this.buttons.length; i++) {
+            // Loop to traverse the array (columns)
+            for (int j = 0; j < this.buttons[i].length; j++) {
+                // If the current button does not already hold a value or is not the center
+                // value the following will occur
+                if (this.buttons[i][j].getText() != "X" && this.buttons[i][j].getText() != "O"
+                        && this.buttons[i][j].getText() != "N") {
+                    array[0] = i;
+                    array[1] = j;
+                    return array;
+                }
+            } // for loop
+
+        } // for loop
+
+        return array;
+
+    } // computer Method
 
     /**
      * This method determines who won the game
@@ -364,17 +414,20 @@ public class Model extends Object {
         for (int i = 0; i < this.buttons.length; i++) {
             // Loop to traverse through the individual columns
             for (int j = 0; j < this.buttons[i].length; j++) {
-                // If its row 1 values the following will occur
-                if (i == 0 && j < 3) {
-                    this.buttons[i][j].setText("" + ((i + 1) + j));
-                }
-                // If its row 2 values the following will occur
-                else if (i == 1 && j < 3) {
-                    this.buttons[i][j].setText("" + ((i + 2) + j + 1));
-                }
-                // If its row 3 values the following will occur
-                else if (i == 2 && j < 3) {
-                    this.buttons[i][j].setText("" + ((i + 3) + j + 2));
+                // If the current button isn't at index 1 and 1 the following will occur
+                if (this.buttons[i][j].getText() != "N") {
+                    // If its row 1 values the following will occur
+                    if (i == 0 && j < 3) {
+                        this.buttons[i][j].setText("" + ((i + 1) + j));
+                    }
+                    // If its row 2 values the following will occur
+                    else if (i == 1 && j < 3) {
+                        this.buttons[i][j].setText("" + ((i + 2) + j + 1));
+                    }
+                    // If its row 3 values the following will occur
+                    else if (i == 2 && j < 3) {
+                        this.buttons[i][j].setText("" + ((i + 3) + j + 2));
+                    }
                 }
             } // for loop
 

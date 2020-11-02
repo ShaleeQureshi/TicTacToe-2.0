@@ -8,23 +8,34 @@
 * 1. Model()
 *
 * Method List:
-* 1. public void setGUI(View view) = This method sets the GUI and initializes the button matrix
-* 2. public void setButtonNum(int num) = This method sets the number to the JButton
-* 3. public int getButtonNum() = This method gets the number to the JButton
-* 4. public int getXCount() = This method gets the xCount
-* 5. public int[] getIndex(int val) = This method gets the indices within a matrix when given a specific value
-* 6. public boolean determineWinner() = This method determines who won the game
-* 7. public void updateState() = This method invokes the updateView Method in the View Class
+* 1. public void getPlayers() = This method gets 2 players
+* 2. public void outputToFile() = This method outputs the data to a file (output.txt)
+* 3. public void setGUI(View view) = This method sets the GUI and initializes the button matrix
+* 4. public void setButtonNum(int num) = This method sets the number to the JButton
+* 5. public int getButtonNum() = This method gets the number to the JButton
+* 6. public int getXCount() = This method gets the xCount
+* 7. public void updateXWins() = This method updates Player X's wins
+* 8. public void updateOWins() = This method updates Player O's wins
+* 9. public int currentRound() = This method returns the current round
+* 10. public int[] getIndex(int val) = This method gets the indices within a matrix when given a specific value
+* 11. public boolean determineWinner() = This method determines who won the game
+* 12. public void newRound() = This method will reset the score between the players when a new round starts
+* 13. public void updateState() = This method invokes the updateView Method in the View Class
 *
 */
 // Import Statements
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class Model extends Object {
 
     // Instance Variables
     private View view;
-    private int buttonNum;
+    private String playerX, playerO;
+    private int buttonNum, playerXWins, playerOWins;
     private JButton[][] buttons;
     private int xCount = 0;
     private int oCount = 0;
@@ -35,6 +46,39 @@ public class Model extends Object {
     public Model() {
         super();
     } // Model Constructor
+
+    /**
+     * This method gets 2 players
+     */
+    public void getPlayers() {
+        this.playerX = JOptionPane.showInputDialog(null, "Please enter the name for Player X");
+        this.playerO = JOptionPane.showInputDialog(null, "Please enter the name for Player O");
+        JOptionPane.showMessageDialog(null, "You can open Settings at any point by pressing the Escape Key");
+    } // getPlayers Method
+
+    /**
+     * This method outputs the data to a file (output.txt)
+     */
+    public void outputToFile() {
+
+        // Prompting user, letting them know the game is over
+        JOptionPane.showMessageDialog(null, "Thank you for playing " + this.playerX + " and " + this.playerO
+                + "\nYour scores have been sent to output.txt!");
+        try {
+            // Outputting the data to the file (output.txt)
+            FileWriter fileW = new FileWriter("output.txt", true);
+            PrintWriter output = new PrintWriter(fileW);
+            output.println("Player X: " + this.playerX);
+            output.println("Player X Wins: " + this.playerXWins);
+            output.println("Player O: " + this.playerO);
+            output.println("Player O Wins: " + this.playerOWins);
+            fileW.close();
+            output.close();
+            System.exit(0); // Terminating the program
+        } catch (IOException error) {
+            JOptionPane.showMessageDialog(null, error.getMessage());
+        }
+    } // outputToFile Method
 
     /**
      * This method sets the GUI and initializes the button matrix
@@ -73,6 +117,32 @@ public class Model extends Object {
     public int getXCount() {
         return this.xCount;
     } // getXCount Method
+
+    /**
+     * This method updates Player X's wins
+     * 
+     */
+    public void updateXWins() {
+        this.playerXWins++;
+    } // updateXWins Method
+
+    /**
+     * This method updates Player O's wins
+     * 
+     */
+    public void updateOWins() {
+        this.playerOWins++;
+    } // updateOWins Method
+
+    /**
+     * This method returns the current round
+     * 
+     * @return current round
+     */
+    public int currentRound() {
+        // The current round is equal to the total number of wins between the players
+        return this.playerOWins + this.playerXWins;
+    } // currentRound Method
 
     /**
      * This method gets the indices within a matrix when given a specific value
@@ -225,6 +295,7 @@ public class Model extends Object {
                         }
                     }
                 }
+
             } // for loop
 
         } // for loop
@@ -233,6 +304,14 @@ public class Model extends Object {
         return this.xCount >= 3 || this.oCount >= 3;
 
     } // determineWinner Method
+
+    /**
+     * This method will reset the score between the players when a new round starts
+     */
+    public void newRound() {
+        this.xCount = 0;
+        this.oCount = 0;
+    } // newRound Method
 
     /**
      * This method invokes the updateView Method in the View Class

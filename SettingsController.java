@@ -2,10 +2,10 @@
 /*
 * Last Modified: November 1, 2020
 * Author: Shalee (Shahrukh) Qureshi
-* Description: This class creates the Model for the SettingsView 
+* Description: This class creates the Controller for the SettingsView 
 *
 * Constructor List:
-* 1. ListController(ListModel model, JButton btnGitHub, JButton btnWebsite) = This is the ListController Constructor
+* 1. SettingsController(ListModel model)
 *
 * Method List:
 * 1. public void valueChanged(ListSelectionEvent e) = This method updates the state of the JSplitPane when a new list item is selected
@@ -13,30 +13,24 @@
 *
 */
 // Import Statements
-import javax.swing.JButton;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class ListController implements ListSelectionListener, ActionListener {
+public class SettingsController implements ListSelectionListener, ActionListener {
 
     // Instance Variables
-    private ListModel model;
-    private JButton btnGitHub, btnWebsite;
+    private SettingsModel model;
 
     /**
-     * This is the ListController Constructor
+     * This is the SettingsController Constructor
      * 
      * @param model
-     * @param btnGitHub
-     * @param btnWebsite
      */
-    public ListController(ListModel model, JButton btnGitHub, JButton btnWebsite) {
+    public SettingsController(SettingsModel model) {
         this.model = model;
-        this.btnGitHub = btnGitHub;
-        this.btnWebsite = btnWebsite;
-    } // ListConstroller Constructor
+    } // SettingsController Constructor
 
     @Override
     /**
@@ -46,7 +40,7 @@ public class ListController implements ListSelectionListener, ActionListener {
      * @param e
      */
     public void valueChanged(ListSelectionEvent e) {
-        this.model.updateState();
+        this.model.updateState(); // Invoking the update state method whenever a list item is changed
     } // valueChanged Method
 
     @Override
@@ -56,14 +50,7 @@ public class ListController implements ListSelectionListener, ActionListener {
      * @param e
      */
     public void actionPerformed(ActionEvent e) {
-        // If the GitHub button is clicked then the following will occur
-        if (e.getSource() == btnGitHub) {
-            this.model.browse(btnGitHub);
-        }
-        // If the Website button is clicked then the following will occur
-        else if (e.getSource() == btnWebsite) {
-            this.model.browse(btnWebsite);
-        }
+        this.model.browse(e.getActionCommand()); // Passing the command to the browse function
     } // actionPerformed Method
 
-} // ListController Method
+} // SettingsController Method

@@ -35,13 +35,14 @@ public class SettingsView extends JFrame {
     private JSplitPane splitPane;
     private JScrollPane scrollPane;
     private JPanel mainPanel;
-    private String[] listItems = { "About", "Help", "Game Settings" };
+    private String[] listItems = { "About", "Help" };
     private JPanel[] panels;
     private JLabel[] labels;
     private JButton btnGitHub = new JButton("GitHub");
     private JButton btnWebsite = new JButton("Website");
+    private JButton btnHelp = new JButton("Watch a Video");
     private final JList<String> list;
-    private ListModel model;
+    private SettingsModel model;
     private final Font lblFont = new Font("Arial", Font.PLAIN, 10);
 
     /**
@@ -49,7 +50,7 @@ public class SettingsView extends JFrame {
      * 
      * @param model
      */
-    public SettingsView(ListModel model) {
+    public SettingsView(SettingsModel model) {
         super();
         this.model = model;
         this.model.setGUI(this);
@@ -97,13 +98,14 @@ public class SettingsView extends JFrame {
     private void initializeControllers() {
 
         // This creates an instance of the Controllers' class for the list
-        ListController controller = new ListController(this.model, this.btnGitHub, this.btnWebsite);
+        SettingsController controller = new SettingsController(this.model);
         this.list.addListSelectionListener(controller);
 
         // This creates an instance of the Controllers' class for the buttons
-        ListController controllerBtn = new ListController(this.model, this.btnGitHub, this.btnWebsite);
+        SettingsController controllerBtn = new SettingsController(this.model);
         this.btnGitHub.addActionListener(controllerBtn);
         this.btnWebsite.addActionListener(controllerBtn);
+        this.btnHelp.addActionListener(controllerBtn);
 
     } // initializeControllers Method
 
@@ -132,7 +134,7 @@ public class SettingsView extends JFrame {
         this.mainPanel = new JPanel(); // Initializing the main JPanel
 
         // Array of JPanels, JLabels and BoxLayout
-        this.panels = new JPanel[3];
+        this.panels = new JPanel[2];
         this.labels = new JLabel[this.panels.length];
 
         // Loop to initialize the JPanel[] and JLabel[]
@@ -141,7 +143,7 @@ public class SettingsView extends JFrame {
             this.labels[i] = new JLabel();
         } // for loop
 
-        // panels[0]
+        // panels[0] (About Panel)
         this.labels[0].setText("<html><u>Developed by Shahrukh (Shalee) Qureshi");
         this.labels[0].setFont(this.lblFont);
         this.btnGitHub = this.btnSetter(this.btnGitHub);
@@ -150,10 +152,12 @@ public class SettingsView extends JFrame {
         this.panels[0].add(this.btnGitHub, BorderLayout.CENTER);
         this.panels[0].add(this.btnWebsite, BorderLayout.CENTER);
 
-        // panels[1]
-        this.labels[1].setText("<html><u>How to Play");
+        // panels[1] (Help Panel)
+        this.labels[1].setText("<html><u>Need some help? Watch a quick video!");
         this.labels[1].setFont(this.lblFont);
+        this.btnHelp = this.btnSetter(this.btnHelp);
         this.panels[1].add(this.labels[1]);
+        this.panels[1].add(this.btnHelp, BorderLayout.CENTER);
 
         // Adjusting the SplitPane
         this.splitPane.setLeftComponent(this.scrollPane);
@@ -162,7 +166,7 @@ public class SettingsView extends JFrame {
         this.splitPane.setDividerSize(0);
         this.splitPane.setSize(new Dimension(400, 200));
 
-        this.mainPanel.add(this.splitPane); // Adding the SplitPane to the JPanel
+        this.mainPanel.add(this.splitPane);// Adding the SplitPane to the JPanel
         this.add(this.mainPanel); // Adding the main JPanel to this (JFrame)
 
     } // setLayout Method

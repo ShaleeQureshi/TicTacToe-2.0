@@ -15,6 +15,7 @@
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyListener;
+import javax.swing.JOptionPane;
 import java.awt.event.KeyEvent;
 
 public class Controller implements ActionListener, KeyListener {
@@ -38,10 +39,15 @@ public class Controller implements ActionListener, KeyListener {
      * @param e
      */
     public void actionPerformed(ActionEvent e) {
+        // If the user wants to exit the game the following will occur
+        if (e.getActionCommand() == "Exit Game") {
+            this.model.outputToFile();
+        }
         try {
             this.model.setButtonNum(Integer.parseInt(e.getActionCommand())); // Setting the number to the button
         } catch (NumberFormatException error) {
             System.out.println(error.getMessage());
+            JOptionPane.showMessageDialog(null, error.getMessage());
         }
     } // actionPerformed Method
 
@@ -63,7 +69,7 @@ public class Controller implements ActionListener, KeyListener {
     public void keyPressed(KeyEvent e) {
         // If the user presses the escape button then the SettingsView will open
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            ListModel model = new ListModel();
+            SettingsModel model = new SettingsModel();
             new SettingsView(model);
         }
     } // keyPressed Method

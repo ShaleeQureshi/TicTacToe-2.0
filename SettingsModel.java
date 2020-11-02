@@ -5,7 +5,7 @@
 * Description: This class creates the Model for the SettingsView 
 *
 * Constructor List:
-* 1. ListModel()
+* 1. SettingsModel()
 *
 * Method List:
 * 1. public void setGUI(SettingsView view) = This method sets the GUI for the SettingsView
@@ -15,14 +15,13 @@
 *
 */
 // Import Statements
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class ListModel extends Object {
+public class SettingsModel extends Object {
 
     // Instance Variables
     private SettingsView view;
@@ -30,11 +29,11 @@ public class ListModel extends Object {
     private final String personalSite = "https://www.squreshi.net/";
 
     /**
-     * This is the ListModel Constructor
+     * This is the SettingsModel Constructor
      */
-    public ListModel() {
+    public SettingsModel() {
         super();
-    } // ListModel Constructor
+    } // SettingsModel Constructor
 
     /**
      * This method sets the GUI for the SettingsView
@@ -58,15 +57,16 @@ public class ListModel extends Object {
      * 
      * @param btn
      */
-    public void browse(JButton btn) {
+    public void browse(String command) {
         // If the GitHub button was clicked the following will occur
-        if (btn.getText() == "GitHub") {
+        if (command == "GitHub") {
             this.openWeb(this.github);
         }
         // If the Website button was clicked the following will occur
-        else if (btn.getText() == "Website") {
+        else if (command == "Website") {
             this.openWeb(this.personalSite);
         }
+
     } // browse Method
 
     // Helper Methods
@@ -87,4 +87,4 @@ public class ListModel extends Object {
         }
     } // openWeb Method
 
-} // ListModel Class
+} // SettingsModel Class

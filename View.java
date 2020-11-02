@@ -28,7 +28,12 @@ public class View extends JPanel {
     // Instance Variables
     private Model model;
     private JButton[][] buttons = new JButton[3][3];
+    private JButton btnExit = new JButton("Exit Game");
     private JLabel lblTurn = new JLabel("Current Turn: X");
+    private JLabel lblCurrentRound = new JLabel("Round: 0");
+    private JPanel panelRow1 = new JPanel();
+    private JPanel panelRow2 = new JPanel();
+    private JPanel panelRow3 = new JPanel();
 
     /**
      * This is the View Constructor
@@ -38,7 +43,8 @@ public class View extends JPanel {
     public View(Model model) {
         super(); // Invoking the Superclass
         this.model = model; // Initializing Instance Variable
-        this.model.setGUI(this);
+        this.model.getPlayers(); // Getting the Players
+        this.model.setGUI(this); // Setting this GUI
         this.setPreferredSize(new Dimension(200, 150));
         this.setFocusable(true);
         this.requestFocusInWindow();
@@ -75,12 +81,26 @@ public class View extends JPanel {
                 // If Player X won the following will occur
                 if (this.model.getXCount() >= 3) {
                     JOptionPane.showMessageDialog(null, "Winner Player X");
+                    this.model.updateXWins();
                 }
                 // If Player O won the following will occur
                 else {
                     JOptionPane.showMessageDialog(null, "Winner Player O");
+                    this.model.updateOWins();
+                }
+                // If the players have not played 4 rounds the following will occur
+                if (this.model.currentRound() < 4) {
+                    this.setGameBoard(); // Resetting the game board
+                    this.model.newRound(); // Resetting the score
+                    this.lblCurrentRound.setText("Round: " + this.model.currentRound()); // Updating the current round
+                                                                                         // label
+                }
+                // If the players have played 4 rounds the following will occur
+                else {
+                    this.model.outputToFile();
                 }
             }
+
         }
 
     } // updateView Method
@@ -104,12 +124,9 @@ public class View extends JPanel {
 
         // Instantiating Objects
         JPanel panelTurn = new JPanel();
-        JPanel panelRow1 = new JPanel();
-        JPanel panelRow2 = new JPanel();
-        JPanel panelRow3 = new JPanel();
-        BoxLayout layoutRow1 = new BoxLayout(panelRow1, BoxLayout.X_AXIS);
-        BoxLayout layoutRow2 = new BoxLayout(panelRow2, BoxLayout.X_AXIS);
-        BoxLayout layoutRow3 = new BoxLayout(panelRow3, BoxLayout.X_AXIS);
+        BoxLayout layoutRow1 = new BoxLayout(this.panelRow1, BoxLayout.X_AXIS);
+        BoxLayout layoutRow2 = new BoxLayout(this.panelRow2, BoxLayout.X_AXIS);
+        BoxLayout layoutRow3 = new BoxLayout(this.panelRow3, BoxLayout.X_AXIS);
 
         // Loop to traverse through the rows
         for (int i = 0; i < this.buttons.length; i++) {
@@ -118,7 +135,7 @@ public class View extends JPanel {
                 // If its row 1 values the following will occur
                 if (i == 0 && j < 3) {
                     this.buttons[i][j] = new JButton("" + ((i + 1) + j));
-                    panelRow1.add(this.buttons[i][j]);
+                    this.panelRow1.add(this.buttons[i][j]);
                 }
                 // If its row 2 values the following will occur
                 else if (i == 1 && j < 3) {
@@ -129,12 +146,12 @@ public class View extends JPanel {
                     } else {
                         this.buttons[i][j] = new JButton("" + ((i + 2) + j + 1));
                     }
-                    panelRow2.add(this.buttons[i][j]);
+                    this.panelRow2.add(this.buttons[i][j]);
                 }
                 // If its row 3 values the following will occur
                 else if (i == 2 && j < 3) {
                     this.buttons[i][j] = new JButton("" + ((i + 3) + j + 2));
-                    panelRow3.add(this.buttons[i][j]);
+                    this.panelRow3.add(this.buttons[i][j]);
                 }
                 this.buttons[i][j].setFocusable(false);
             } // for loop
@@ -143,17 +160,41 @@ public class View extends JPanel {
 
         // Adding the layouts to the individual panels
         panelTurn.add(this.lblTurn);
-        panelRow1.setLayout(layoutRow1);
-        panelRow2.setLayout(layoutRow2);
-        panelRow3.setLayout(layoutRow3);
+        this.panelRow1.setLayout(layoutRow1);
+        this.panelRow2.setLayout(layoutRow2);
+        this.panelRow3.setLayout(layoutRow3);
 
         // Adding each panel to the main panel
         this.add(panelTurn);
-        this.add(panelRow1);
-        this.add(panelRow2);
-        this.add(panelRow3);
+        this.add(this.lblCurrentRound);
+        this.add(this.panelRow1);
+        this.add(this.panelRow2);
+        this.add(this.panelRow3);
+        this.add(this.btnExit);
 
     } // initializePanel Method
+
+    public void setGameBoard() {
+        // Loop to traverse through the rows
+        for (int i = 0; i < this.buttons.length; i++) {
+            // Loop to traverse through the individual columns
+            for (int j = 0; j < this.buttons[i].length; j++) {
+                // If its row 1 values the following will occur
+                if (i == 0 && j < 3) {
+                    this.buttons[i][j].setText("" + ((i + 1) + j));
+                }
+                // If its row 2 values the following will occur
+                else if (i == 1 && j < 3) {
+                    this.buttons[i][j].setText("" + ((i + 2) + j + 1));
+                }
+                // If its row 3 values the following will occur
+                else if (i == 2 && j < 3) {
+                    this.buttons[i][j].setText("" + ((i + 3) + j + 2));
+                }
+            } // for loop
+
+        } // for loop
+    }
 
     /**
      * This method initializes the controllers
@@ -171,6 +212,10 @@ public class View extends JPanel {
                 this.buttons[i][j].addActionListener(controllers[i][j]); // Adding an ActionListener to the JButton
             } // for loop
         } // for loop
+
+        // Adding a Controller to the exit button
+        Controller exitController = new Controller(this.model);
+        this.btnExit.addActionListener(exitController);
 
         // // Adding a Controller for the KeyListener
         Controller keyController = new Controller(this.model);

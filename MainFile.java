@@ -32,5 +32,6 @@ public class MainFile {
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setVisible(true);
-    }
+    } // main Method
+
 } // MainFile Class

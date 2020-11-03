@@ -15,15 +15,17 @@
 * 5. public void btnEvents(String command) = This method performs an action based on the action command
 * 6. public void setButtonNum(int num) = This method sets the number to the JButton
 * 7. public int getButtonNum() = This method gets the number to the JButton
-* 8. public int getXCount() = This method gets the xCount
-* 9. public void updateXWins() = This method updates Player X's wins
-* 10. public void updateOWins() = This method updates Player O's wins
-* 11. public int currentRound() = This method returns the current round
-* 12. public int[] getIndex(int val) = This method gets the indices within a matrix when given a specific value
-* 13. public int[] computer() = This method determines where the AI should place its letter
-* 14. public boolean determineWinner() = This method determines who won the game
-* 15. public void newRound() = This method will reset the score between the players when a new round starts
-* 16. public void updateState() = This method invokes the updateView Method in the View Class
+* 8. public String getPlayerX() = This method gets playerX
+* 9. public String getPlayerO() = This method gets playerO
+* 10. public int getXCount() = This method gets the xCount
+* 11. public void updateXWins() = This method updates Player X's wins
+* 12. public void updateOWins() = This method updates Player O's wins
+* 13. public int currentRound() = This method returns the current round
+* 14. public int[] getIndex(int val) = This method gets the indices within a matrix when given a specific value
+* 15. public int[] computer() = This method determines where the AI should place its letter
+* 16. public boolean determineWinner() = This method determines who won the game
+* 17. public void newRound() = This method will reset the score between the players when a new round starts
+* 18. public void updateState() = This method invokes the updateView Method in the View Class
 *
 */
 // Import Statements
@@ -158,7 +160,7 @@ public class Model extends Object {
         // If the user presses the Settings button the following will occur
         else if (command == "Settings") {
             // Opening up the Settings Model and calling its view method
-            SettingsModel model = new SettingsModel();
+            SettingsModel model = new SettingsModel(this);
             new SettingsView(model);
         }
         // If the user presses the Move the AI button the following will occur
@@ -188,6 +190,24 @@ public class Model extends Object {
     public int getButtonNum() {
         return this.buttonNum;
     } // getButtonNum Method
+
+    /**
+     * This method gets playerX
+     * 
+     * @return playerX
+     */
+    public String getPlayerX() {
+        return this.playerX;
+    } // getPlayerX Method
+
+    /**
+     * THis method gets playerO
+     * 
+     * @return playerO
+     */
+    public String getPlayerO() {
+        return this.playerO;
+    } // getPlayerO Method
 
     /**
      * This method gets the xCount

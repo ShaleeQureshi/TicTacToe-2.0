@@ -9,6 +9,9 @@
 *
 * Method List:
 * 1. public void actionPerformed(ActionEvent e) = This method performs actions upon I/O on JComponents
+* 2. public void keyTyped(KeyEvent e) = This method is not used in this program
+* 3. public void keyPressed(KeyEvent e) = This method performs an action based on keyboard events (keys being pressed)
+* 4. public void keyReleased(KeyEvent e) = This method is not used in this program
 *
 */
 // Import Statements
@@ -50,22 +53,15 @@ public class Controller implements ActionListener, KeyListener {
             try {
                 this.model.setButtonNum(Integer.parseInt(e.getActionCommand())); // Setting the number to the button
             } catch (NumberFormatException error) {
-                JOptionPane.showMessageDialog(null, "Invalid Selection! You may only select tiles that are numbers!"); // Showing
-                                                                                                                       // an
-                                                                                                                       // error
-                                                                                                                       // message
-                                                                                                                       // if
-                                                                                                                       // there
-                                                                                                                       // is
-                                                                                                                       // an
-                                                                                                                       // error
+                // Showing an error message if there is an error with the user's selection
+                JOptionPane.showMessageDialog(null, "Invalid Selection! You may only select tiles that are numbers!");
             }
         }
     } // actionPerformed Method
 
     @Override
     /**
-     * This method is not used in this instance
+     * This method is not used in this program
      * 
      * @param e
      */
@@ -74,21 +70,21 @@ public class Controller implements ActionListener, KeyListener {
 
     @Override
     /**
-     * This method is not used in this instance
+     * This method performs an action based on keyboard events (keys being pressed)
      * 
      * @param e
      */
     public void keyPressed(KeyEvent e) {
         // If the user presses the escape button then the SettingsView will open
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            SettingsModel model = new SettingsModel();
-            new SettingsView(model);
+            SettingsModel settingsModel = new SettingsModel(this.model);
+            new SettingsView(settingsModel);
         }
     } // keyPressed Method
 
     @Override
     /**
-     * This method is not used in this instance
+     * This method is not used in this program
      * 
      * @param e
      */

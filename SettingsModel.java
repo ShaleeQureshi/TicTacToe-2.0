@@ -10,8 +10,11 @@
 * Method List:
 * 1. public void setGUI(SettingsView view) = This method sets the GUI for the SettingsView
 * 2. public void updateState() = This method updates the state of the program
-* 3. public void performAction(String command) = This method performs an action when a button is clicked
-* 4. private void openWeb(String uri) = This method opens a specific URI on the web
+* 3. public String getPlayerSelection() = This method gets the player selection (game mode) from the Model Class
+* 4. public String getPlayerX() = This method returns the Model Class value of playerX
+* 5. public String getPlayerO() = This method gets the Model Class value of playerO
+* 6. public void performAction(String command) = This method performs an action when a button is clicked
+* 7. private void openWeb(String uri) = This method opens a specific URI on the web
 *
 */
 // Import Statements
@@ -25,14 +28,16 @@ public class SettingsModel extends Object {
 
     // Instance Variables
     private SettingsView view;
+    private Model model;
     private final String github = "https://github.com/ShaleeQureshi";
     private final String personalSite = "https://www.squreshi.net/";
 
     /**
      * This is the SettingsModel Constructor
      */
-    public SettingsModel() {
+    public SettingsModel(Model model) {
         super();
+        this.model = model;
     } // SettingsModel Constructor
 
     /**
@@ -50,6 +55,33 @@ public class SettingsModel extends Object {
     public void updateState() {
         this.view.updateView();
     } // updateState Method
+
+    /**
+     * This method gets the player selection (game mode) from the Model Class
+     * 
+     * @return the model class instance of player selection
+     */
+    public String getPlayerSelection() {
+        return this.model.getPlayerSelection();
+    } // getPlayerSelection Method
+
+    /**
+     * This method returns the Model Class value of playerX
+     * 
+     * @return model class instance of playerX
+     */
+    public String getPlayerX() {
+        return this.model.getPlayerX();
+    } // getPlayerX Method
+
+    /**
+     * This method gets the Model Class value of playerO
+     * 
+     * @return model class instance of playerO
+     */
+    public String getPlayerO() {
+        return this.model.getPlayerO();
+    } // getPlayerO Method
 
     /**
      * This method performs an action when a button is clicked

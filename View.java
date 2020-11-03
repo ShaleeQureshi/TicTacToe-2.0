@@ -34,13 +34,15 @@ public class View extends JPanel {
 
     // Instance Variables
     private Model model;
-    private JButton[][] buttons = new JButton[3][3];
+    private JButton[][] buttons = new JButton[3][3]; // Matrix of JButtons represents the game board
     private JButton btnExit = new JButton("Exit Game");
     private JButton btnSettings = new JButton("Settings");
     private JButton btnRestart = new JButton("Restart");
     private JButton btnAIMove = new JButton("Move the AI");
     private JLabel lblTurn = new JLabel("Current Turn: X");
-    private JLabel lblCurrentRound = new JLabel("Round: 0");
+    private JLabel lblCurrentRound = new JLabel("Round: 1");
+
+    // 1 JPanel per row of buttons (3 by 3 grid so 3 panels)
     private JPanel panelRow1 = new JPanel();
     private JPanel panelRow2 = new JPanel();
     private JPanel panelRow3 = new JPanel();
@@ -61,8 +63,7 @@ public class View extends JPanel {
         this.setPreferredSize(new Dimension(200, 220));
         this.setFocusable(true);
         this.requestFocusInWindow();
-
-        // Invoking helper Methods
+        // Invoking class helper Methods
         this.initializePanel();
         this.initializeControllers();
 
@@ -77,47 +78,45 @@ public class View extends JPanel {
         int[] indices = new int[2]; // Getting the indices (for the 2d matrix that the num was clicked)
         int[] aiIndicies = new int[2]; // Getting the indices for the AI
 
-        // If the user did not press the fifth button (N) the following will occur
-        if (val != 5) {
-            // If user selected to play with another player (multiplayer) then the following
-            // will occur
-            if (this.playerSelection == "Multiplayer") {
-                indices = this.model.getIndex(val); // Getting the indices
-                // If the current player was Player X the following will occur
-                if (this.lblTurn.getText() == "Current Turn: X") {
-                    this.buttons[indices[0]][indices[1]].setText("X"); // Changing the button text to X
-                    this.lblTurn.setText("Current Turn: O"); // Letting the Players know its Player O's turn
-                }
-                // If the current player was Player O the following will occur
-                else {
-                    this.buttons[indices[0]][indices[1]].setText("O"); // Changing the button text to O
-                    this.lblTurn.setText("Current Turn: X"); // Letting the Players know its Player X's turn
-                }
+        // If user selected to play with another player (multiplayer) then the following
+        // will occur
+        if (this.playerSelection == "Multiplayer") {
+            indices = this.model.getIndex(val); // Getting the indices
+            // If the current player was Player X the following will occur
+            if (this.lblTurn.getText() == "Current Turn: X") {
+                this.buttons[indices[0]][indices[1]].setText("X"); // Changing the button text to X
+                this.lblTurn.setText("Current Turn: O"); // Letting the Players know its Player O's turn
             }
-            // If the user selected to play by himself (against the AI) then the following
-            // will occur
+            // If the current player was Player O the following will occur
             else {
-                // If it is the Player's turn (Player X) the following will occur
-                if (this.lblTurn.getText() == "Current Turn: X") {
-                    indices = this.model.getIndex(val); // Getting the indices
-                    this.buttons[indices[0]][indices[1]].setText("X"); // Updating the gameboard
-                    this.lblTurn.setText("Current Turn: AI"); // Saying its the AI's turn
-
-                }
-                // If it is the AI's turn then the following will occur
-                else {
-                    aiIndicies = this.model.computer(); // Getting the indices
-                    this.buttons[aiIndicies[0]][aiIndicies[1]].setText("O"); // Updating the gameboard
-                    this.lblTurn.setText("Current Turn: X"); // Saying its the player's turn
-                }
+                this.buttons[indices[0]][indices[1]].setText("O"); // Changing the button text to O
+                this.lblTurn.setText("Current Turn: X"); // Letting the Players know its Player X's turn
             }
         }
+        // If the user selected to play by himself (against the AI) then the following
+        // will occur
+        else {
+            // If it is the Player's turn (Player X) the following will occur
+            if (this.lblTurn.getText() == "Current Turn: X") {
+                indices = this.model.getIndex(val); // Getting the indices
+                this.buttons[indices[0]][indices[1]].setText("X"); // Updating the gameboard
+                this.lblTurn.setText("Current Turn: AI"); // Saying its the AI's turn
+
+            }
+            // If it is the AI's turn then the following will occur
+            else {
+                aiIndicies = this.model.computer(); // Getting the indices
+                this.buttons[aiIndicies[0]][aiIndicies[1]].setText("O"); // Updating the gameboard
+                this.lblTurn.setText("Current Turn: X"); // Saying its the player's turn
+            }
+        }
+
         // Checking to see if someone won yet
         if (this.model.determineWinner()) {
             // If Player X won the following will occur
             if (this.model.getXCount() >= 3) {
                 JOptionPane.showMessageDialog(null, "Winner: Player X");
-                this.model.updateXWins();
+                this.model.updateXWins(); // Updating wins
             }
             // If Player O won the following will occur
             else {
@@ -125,19 +124,30 @@ public class View extends JPanel {
                     JOptionPane.showMessageDialog(null, "Winner: Player O");
                 } else {
                     JOptionPane.showMessageDialog(null, "Winner: AI");
-
                 }
-                this.model.updateOWins();
+                this.model.updateOWins(); // Updating wins
             }
-            // If the players have not played 4 rounds the following will occur
+            this.setLabelCurrentRound("Round: " + this.model.currentRound()); // Updating the Current Round Label
+            // If the players have not played 3 rounds the following will occur
             if (this.model.currentRound() < 4) {
                 this.model.newRound(); // Creating a new round
-                // Updating the Current Round Label
-                this.setLabelCurrentRound("Round: " + this.model.currentRound());
             }
-            // If the players have played 4 rounds the following will occur
+            // If the players have played 3 rounds the following will occur
             else {
-                this.model.outputToFile();
+                Object[] options = { "Yes", "No" };
+                int choice = JOptionPane.showOptionDialog(null,
+                        "Its been " + (this.model.currentRound() - 1) + " rounds! Do you want to keep playing?",
+                        "TicTacToe 2.0 by Shahrukh (Shalee) Qureshi", JOptionPane.YES_NO_OPTION,
+                        JOptionPane.PLAIN_MESSAGE, null, options, null);
+
+                // If the player(s) decided to continue playing the following will occur
+                if (choice == JOptionPane.YES_OPTION) {
+                    this.model.newRound(); // Setting up a new round
+                }
+                // If the player(s) decided to stop playing the following will occur
+                else {
+                    this.model.outputToFile(); // Invoking the outputToFile Method
+                }
             }
         }
 

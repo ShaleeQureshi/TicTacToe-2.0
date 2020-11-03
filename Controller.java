@@ -50,7 +50,15 @@ public class Controller implements ActionListener, KeyListener {
             try {
                 this.model.setButtonNum(Integer.parseInt(e.getActionCommand())); // Setting the number to the button
             } catch (NumberFormatException error) {
-                JOptionPane.showMessageDialog(null, error.getMessage());
+                JOptionPane.showMessageDialog(null, "Invalid Selection! You may only select tiles that are numbers!"); // Showing
+                                                                                                                       // an
+                                                                                                                       // error
+                                                                                                                       // message
+                                                                                                                       // if
+                                                                                                                       // there
+                                                                                                                       // is
+                                                                                                                       // an
+                                                                                                                       // error
             }
         }
     } // actionPerformed Method

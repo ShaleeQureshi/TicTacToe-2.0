@@ -43,7 +43,7 @@ public class Model extends Object {
     private JButton[][] buttons;
     private int xCount = 0;
     private int oCount = 0;
-    private int currentRound = 0;
+    private int currentRound = 1;
     private Players players = new Players();
 
     /**
@@ -78,9 +78,23 @@ public class Model extends Object {
      */
     public void outputToFile() {
 
+        String winner = "";
+        // Determining the overall winner
+        if (this.playerXWins > this.playerOWins) {
+            winner = this.playerX;
+        } else if (this.playerXWins == this.playerOWins) {
+            winner = "Tie";
+        } else {
+            winner = this.playerO;
+        }
         // Prompting user, letting them know the game is over
-        JOptionPane.showMessageDialog(null, "Thank you for playing " + this.playerX + " and " + this.playerO
-                + "\nYour scores have been sent to output.txt!");
+        if (winner != "Tie") {
+            JOptionPane.showMessageDialog(null, "Thank you for playing! " + this.playerX + " and " + this.playerO + "\n"
+                    + winner + " won the most rounds!\nYour scores have been updated in output.txt!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Thank you for playing! " + this.playerX + " and " + this.playerO
+                    + "\nThere is no winner it is a Draw!\nYour scores have been updated in output.txt!");
+        }
         try {
             // Outputting the data to the file (output.txt)
             FileWriter fileW = new FileWriter("output.txt", true);
@@ -206,8 +220,9 @@ public class Model extends Object {
      * @return current round
      */
     public int currentRound() {
-        // The current round is equal to the total number of wins between the players
-        this.currentRound = this.playerOWins + this.playerXWins;
+        // The current round is equal to the total number of wins between the players +
+        // 1 since the initial round is 1
+        this.currentRound = this.playerOWins + this.playerXWins + 1;
         return this.currentRound;
     } // currentRound Method
 

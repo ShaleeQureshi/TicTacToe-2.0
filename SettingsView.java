@@ -41,7 +41,7 @@ public class SettingsView extends JFrame {
     private JSplitPane splitPane;
     private JScrollPane scrollPane;
     private JPanel mainPanel;
-    private String[] listItems = { "About", "Help", "Game Settings" };
+    private String[] listItems = { "About", "Help" };
     private JPanel[] panels;
     private JLabel[] labels;
     private JButton btnGitHub = new JButton("GitHub");

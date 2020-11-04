@@ -11,7 +11,7 @@
 * 1. public void updateView() = This method updates the state of the program
 * 2. public JButton[][] getButtons() = This method allows the other classes (Model class) access to the game board matrix (buttons[][])
 * 3. public void setLabelCurrentRound(String text) = This method sets the current round label
-* 4. public void setLabelCurrentRound(String text) = This method sets the current round label
+* 4. public String getLblTurnText(String text) = This method returns the current player's turn
 * 5. private void initializePanel() = This method sets the layout for the entire main screen
 * 6. private void initializeControllers() = This method initializes the controllers
 *

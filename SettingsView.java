@@ -22,10 +22,10 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import java.awt.Font;
 import java.awt.Dimension;
-import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Color;
 
@@ -41,12 +41,18 @@ public class SettingsView extends JFrame {
     private JSplitPane splitPane;
     private JScrollPane scrollPane;
     private JPanel mainPanel;
-    private String[] listItems = { "About", "Help" };
+    private String[] listItems = { "About", "Help", "Game Settings" };
     private JPanel[] panels;
     private JLabel[] labels;
     private JButton btnGitHub = new JButton("GitHub");
     private JButton btnWebsite = new JButton("Website");
     private JButton btnHelp = new JButton("Watch a Video");
+    private JLabel lblPlayerSelection = new JLabel("Mode    ");
+    private JLabel lblPlayerX = new JLabel("Player X");
+    private JLabel lblPlayerO = new JLabel("Player O");
+    private JTextField txtPlayerSelection = new JTextField(10);
+    private JTextField txtPlayerX = new JTextField(10);
+    private JTextField txtPlayerO = new JTextField(10);
     private final JList<String> list;
     private SettingsModel model;
     private final Font lblFont = new Font("Arial", Font.PLAIN, 10);
@@ -59,6 +65,9 @@ public class SettingsView extends JFrame {
     public SettingsView(SettingsModel model) {
         super();
         this.model = model;
+        this.txtPlayerSelection.setText(this.model.getPlayerSelection());
+        this.txtPlayerX.setText(this.model.getPlayerX());
+        this.txtPlayerO.setText(this.model.getPlayerO());
         this.model.setGUI(this);
 
         // JFrame
@@ -140,7 +149,7 @@ public class SettingsView extends JFrame {
         this.mainPanel = new JPanel(); // Initializing the main JPanel
 
         // Array of JPanels, JLabels and BoxLayout
-        this.panels = new JPanel[2];
+        this.panels = new JPanel[3];
         this.labels = new JLabel[this.panels.length];
 
         // Loop to initialize the JPanel[] and JLabel[]
@@ -154,16 +163,44 @@ public class SettingsView extends JFrame {
         this.labels[0].setFont(this.lblFont);
         this.btnGitHub = this.btnSetter(this.btnGitHub);
         this.btnWebsite = this.btnSetter(this.btnWebsite);
-        this.panels[0].add(this.labels[0], BorderLayout.NORTH);
-        this.panels[0].add(this.btnGitHub, BorderLayout.CENTER);
-        this.panels[0].add(this.btnWebsite, BorderLayout.CENTER);
+        this.panels[0].add(this.labels[0]);
+        this.panels[0].add(this.btnGitHub);
+        this.panels[0].add(this.btnWebsite);
 
         // panels[1] (Help Panel)
         this.labels[1].setText("<html><u>Need some help? Watch a quick video!");
         this.labels[1].setFont(this.lblFont);
         this.btnHelp = this.btnSetter(this.btnHelp);
-        this.panels[1].add(this.labels[1], BorderLayout.NORTH);
-        this.panels[1].add(this.btnHelp, BorderLayout.CENTER);
+        this.panels[1].add(this.labels[1]);
+        this.panels[1].add(this.btnHelp);
+
+        // panel[2] (Game Settings Panel)
+
+        // 3 Panels specifically for the 3 rows being added
+        JPanel panelRow1 = new JPanel();
+        JPanel panelRow2 = new JPanel();
+        JPanel panelRow3 = new JPanel();
+        this.labels[2].setText("<html><u>Shahrukh's TicTacToe (Version 2.0) Game Settings");
+        this.labels[2].setFont(this.lblFont);
+        this.lblPlayerSelection.setFont(this.lblFont);
+        this.lblPlayerX.setFont(this.lblFont);
+        this.lblPlayerO.setFont(this.lblFont);
+        this.txtPlayerSelection.setEnabled(false);
+        this.txtPlayerX.setEnabled(false);
+        this.txtPlayerO.setEnabled(false);
+
+        // Adding the JComponents to each panel
+        panelRow1.add(this.lblPlayerSelection);
+        panelRow1.add(this.txtPlayerSelection);
+        panelRow2.add(this.lblPlayerX);
+        panelRow2.add(this.txtPlayerX);
+        panelRow3.add(this.lblPlayerO);
+        panelRow3.add(this.txtPlayerO);
+        // Adding the JComponents to the main panel
+        this.panels[2].add(this.labels[2]);
+        this.panels[2].add(panelRow1);
+        this.panels[2].add(panelRow2);
+        this.panels[2].add(panelRow3);
 
         // Adjusting the SplitPane
         this.splitPane.setLeftComponent(this.scrollPane);

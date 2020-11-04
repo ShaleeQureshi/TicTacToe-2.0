@@ -147,7 +147,7 @@ public class Model extends Object {
                 // Resetting the Score
                 this.playerXWins = 0;
                 this.playerOWins = 0;
-                this.view.setLabelCurrentRound("Round: " + (this.currentRound = 0));
+                this.view.setLabelCurrentRound("Round: " + (this.currentRound = 1));
                 // Resetting the gameboard
                 this.newRound();
             }

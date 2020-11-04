@@ -59,6 +59,15 @@ public class View extends JPanel {
         this.model.start();
         this.playerSelection = this.model.getPlayerSelection(); // Getting the type of game mode (Multiplayer or
                                                                 // SinglePlayer)
+
+        this.btnSettings.setFocusable(false);
+        this.btnSettings.requestFocusInWindow();
+        this.btnRestart.setFocusable(false);
+        this.btnRestart.requestFocusInWindow();
+        this.btnExit.setFocusable(false);
+        this.btnExit.requestFocusInWindow();
+        this.btnAIMove.setFocusable(false);
+        this.btnAIMove.requestFocusInWindow();
         this.model.setGUI(this); // Setting this GUI
         this.setPreferredSize(new Dimension(200, 220));
         this.setFocusable(true);

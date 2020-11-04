@@ -1,6 +1,6 @@
 
 /*
-* Last Modified: November 1, 2020
+* Last Modified: November 3, 2020
 * Author: Shalee (Shahrukh) Qureshi
 * Description: This class creates the View for the Settings panel for the game
 *
@@ -196,6 +196,7 @@ public class SettingsView extends JFrame {
         panelRow2.add(this.txtPlayerX);
         panelRow3.add(this.lblPlayerO);
         panelRow3.add(this.txtPlayerO);
+
         // Adding the JComponents to the main panel
         this.panels[2].add(this.labels[2]);
         this.panels[2].add(panelRow1);

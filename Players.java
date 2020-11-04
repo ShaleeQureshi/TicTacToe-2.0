@@ -101,7 +101,8 @@ public class Players extends Object {
     private void promptSinglePlayer() {
         this.playerX = JOptionPane.showInputDialog(null, "Please enter the name for Player X");
         this.playerO = "Computer";
-        JOptionPane.showMessageDialog(null, "You can open Settings at any point by pressing the Escape Key");
+        JOptionPane.showMessageDialog(null,
+                "Remember to Press the \"Move the AI\" button whenever you finish your turn!\nYou can open Settings at any point by pressing the Escape Key");
     } // promptSinglePlayer Method
 
 } // Players Class

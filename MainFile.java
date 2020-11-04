@@ -1,8 +1,8 @@
 
 /*
-* Last Modified: November 1, 2020
+* Last Modified: November 3, 2020
 * Author: Shalee (Shahrukh) Qureshi
-* Description: This class creates the Model for the Game
+* Description: This class runs the entire program by instantiating and linking the Model and View Classes
 *
 * Method List:
 * 1. public static void main(String[] args) = This method runs the entire program
@@ -23,7 +23,7 @@ public class MainFile {
         // Instantiating Objects
         Model model = new Model();
         View view = new View(model);
-        JFrame frame = new JFrame();
+        JFrame frame = new JFrame("Shahrukh (Shalee) Qureshi's TicTacToe 2.0 Game");
 
         // Adjusting Frame Settings
         frame.setContentPane(view);

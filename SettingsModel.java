@@ -1,6 +1,6 @@
 
 /*
-* Last Modified: November 1, 2020
+* Last Modified: November 3, 2020
 * Author: Shalee (Shahrukh) Qureshi
 * Description: This class creates the Model for the SettingsView 
 *
@@ -31,6 +31,7 @@ public class SettingsModel extends Object {
     private Model model;
     private final String github = "https://github.com/ShaleeQureshi";
     private final String personalSite = "https://www.squreshi.net/";
+    private final String youtubeVideo = "https://www.youtube.com/watch?v=6CNw1Y2bHTo&ab_channel=ShaleeQureshi";
 
     /**
      * This is the SettingsModel Constructor
@@ -97,6 +98,14 @@ public class SettingsModel extends Object {
         else if (command == "Website") {
             this.openWeb(this.personalSite);
         }
+        // If the Watch a Video button was clicked the following will occur
+        else if (command == "Watch a Video") {
+            this.openWeb(this.youtubeVideo);
+        }
+        // NOTE: The usage of else if rather than an else for the final block is because
+        // it makes it easier to implement other blocks into the selection structure in
+        // the future
+
     } // performAction Method
 
     // Helper Methods
